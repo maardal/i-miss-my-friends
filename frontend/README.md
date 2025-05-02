@@ -1,38 +1,27 @@
-# sv
+# I Miss My Friends frontend
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A simple Sveltekit frontend for I Miss My Friends.
 
-## Creating a project
+## How to run
 
-If you're seeing this, you've probably already done this step. Congrats!
+Currently there are no releases or set deployment method, so clone the repository, build the frontend and run it in preview mode.
+NB! This is not for production, just a temporary way to have a process running for a little while.
 
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+After cloning the repository, bavigate to the frontend folder.
+Run the following command to install necessary project dependencies.
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+npm install
 ```
 
-## Building
-
-To create a production version of your app:
+Then build the frontend.
 
 ```bash
-npm run build
+npm run build.
 ```
 
-You can preview the production build with `npm run preview`.
+Lastly we run it in preview mode.
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```bash
+npm run preview
+```
