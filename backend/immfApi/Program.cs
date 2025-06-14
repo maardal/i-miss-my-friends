@@ -49,6 +49,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+//lovedones endpoint
+
 app.MapGet("/", () => "Hello World!");
 
 app.MapGet("/lovedones", async (IMissMyFriendsDb db) => await db.LovedOnes.ToListAsync());
@@ -61,7 +63,7 @@ app.MapPost("/lovedone", async (IMissMyFriendsDb db, string name, string relatio
         return Results.BadRequest($"Relationship must be one of: {EnumTools.EnumListPrettified()}");
     }
 
-    var lovedOne = new LovedOne { Name = name, Relationship = EnumTools.RelationshipMapper(relationship), Date = date};
+    var lovedOne = new LovedOne { Name = name, Relationship = EnumTools.RelationshipMapper(relationship), Date = date };
 
     await db.LovedOnes.AddAsync(lovedOne);
     await db.SaveChangesAsync();
@@ -91,5 +93,33 @@ app.MapDelete("/lovedone/{id}", async (IMissMyFriendsDb db, int id) =>
     return Results.Ok();
 });
 
+//Hangout endpoints
+app.MapGet("/hangouts/", async (IMissMyFriendsDb db) => await db.Hangouts.Include(hangout => hangout.LovedOne).ToListAsync());
+
+app.MapGet("hangout/{id}", async (IMissMyFriendsDb db, int id) => await db.Hangouts.FindAsync(id));
+
+app.MapPost("/hangout", async (IMissMyFriendsDb db, int lovedOneId, string date) =>
+{
+    var lovedOne = await db.LovedOnes.FindAsync(lovedOneId);
+    if (lovedOne == null) return Results.NotFound($"No LovedOne by id {lovedOneId}");
+
+    //Temporary adding todays date.
+    var todaysDate = DateTime.Today;
+
+    var hangout = new Hangout { Date = todaysDate, LovedOne = lovedOne };
+    await db.Hangouts.AddAsync(hangout);
+    await db.SaveChangesAsync();
+    return Results.Created($"/hangout/{hangout.Id}", hangout);
+});
+
+app.MapDelete("/hangout/{id}", async (IMissMyFriendsDb db, int id) =>
+{
+    var hangout = await db.Hangouts.FindAsync(id);
+    if (hangout == null) return Results.NotFound();
+    db.Hangouts.Remove(hangout);
+    await db.SaveChangesAsync();
+    return Results.Ok();
+
+});
 
 app.Run();
