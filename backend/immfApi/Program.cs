@@ -9,6 +9,16 @@ const string Database = "Immf";
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString(Database) ?? throw new InvalidOperationException($"Connection string for {Database} not found.");
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        }
+    );
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSqlite<IMissMyFriendsDb>(connectionString);
 builder.Services.Configure<JsonOptions>(options =>
@@ -27,6 +37,9 @@ builder.Services.AddSwaggerGen(c =>
 
 
 var app = builder.Build();
+
+app.UseCors();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
