@@ -3,6 +3,7 @@ using System;
 using Immf.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace immfApi.Migrations
 {
     [DbContext(typeof(IMissMyFriendsDb))]
-    partial class IMissMyFriendsDbModelSnapshot : ModelSnapshot
+    [Migration("20250614145140_RemoveHangOutsOnLovedOne")]
+    partial class RemoveHangOutsOnLovedOne
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.5");

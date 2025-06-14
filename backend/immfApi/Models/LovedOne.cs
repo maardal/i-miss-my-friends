@@ -6,9 +6,10 @@ namespace Immf.Models
         public required string Name { get; set; }
         public Relationship Relationship { get; set; }
         public string? Date { get; set; } //TODO: find Date format.
+        //public ICollection<Hangout>? Hangouts { get; set; }
 
     }
-    
+
     public enum Relationship
     {
         Friend,
