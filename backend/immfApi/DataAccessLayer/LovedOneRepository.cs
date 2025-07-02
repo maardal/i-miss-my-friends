@@ -30,9 +30,14 @@ namespace immfApi.DataAccessLayer
         }
 
 
-        public Task<LovedOne> UpdateAsync(LovedOne lovedOne)
+        public async Task<LovedOne?> UpdateAsync(int id, string name, Relationship relationship)
         {
-            throw new NotImplementedException();
+            var lovedOne = await _context.LovedOnes.FindAsync(id);
+            if (lovedOne == null) return null;
+            lovedOne.Name = name;
+            lovedOne.Relationship = relationship;
+            await _context.SaveChangesAsync();
+            return lovedOne;
         }
 
         public Task DeleteAsync(int id)
@@ -48,6 +53,6 @@ namespace immfApi.DataAccessLayer
         Task<LovedOne?> GetByIdAsync(int id);
         Task<List<LovedOne>> GetAllAsync();
         Task DeleteAsync(int id);
-        Task<LovedOne> UpdateAsync(LovedOne lovedOne);
+        Task<LovedOne?> UpdateAsync(int id, string name, Relationship relationship);
     }
 }

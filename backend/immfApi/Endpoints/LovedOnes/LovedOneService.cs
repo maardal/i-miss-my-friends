@@ -40,6 +40,13 @@ namespace immfApi.Endpoints.LovedOnes
             )).ToList();
             return new GetAllLovedOnesResponse(lovedOnesList);
         }
+
+        public async Task<UpdateLovedOneResponse?> UpdateAsync(UpdateLovedOneRequest request)
+        {
+            var lovedOne = await _lovedOneRepository.UpdateAsync(request.Id, request.Name, EnumTools.MapStringToEnumRelationship(request.Relationship));
+            if (lovedOne == null) return null;
+            return new UpdateLovedOneResponse($"Successfully updated lovedone with ID {lovedOne.Id}, with data {lovedOne.Name} & {lovedOne.Relationship}");
+        }
     }
 
     public interface ILovedOneService
@@ -47,5 +54,6 @@ namespace immfApi.Endpoints.LovedOnes
         Task<CreateLovedOneResponse> CreateAsync(CreateLovedOneRequest request);
         Task<GetSingleLovedOneResponse?> GetByIdAsync(GetByIdRequest request);
         Task<GetAllLovedOnesResponse> GetAllAsync();
+        Task<UpdateLovedOneResponse?> UpdateAsync(UpdateLovedOneRequest request);
     }
 }
