@@ -1,20 +1,32 @@
-using Immf.Models;
+using immfApi.Models;
 
 public static class EnumTools
 {
-    public static Relationship RelationshipMapper(string enumAsString)
+    public static Relationship MapStringToEnumRelationship(string enumAsString)
     {
         Relationship returnEnum = Relationship.Friend;
-        switch (enumAsString)
+        switch (enumAsString.ToLower())
         {
-            case "Friend":
+            case "friend":
                 returnEnum = Relationship.Friend;
                 break;
-            case "Family":
+            case "family":
                 returnEnum = Relationship.Family;
                 break;
         }
         return returnEnum;
+    }
+
+    public static string MapEnumToStringRelationship(Relationship relationship)
+    {
+        string defaultReturn = relationship switch
+        {
+            Relationship.Family => "family",
+            Relationship.Friend => "friend",
+            _ => "unknown relationship",
+        };
+        return defaultReturn;
+
     }
 
     public static string EnumListPrettified()

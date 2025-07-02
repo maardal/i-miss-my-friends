@@ -1,0 +1,53 @@
+using immfApi.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace immfApi.DataAccessLayer
+{
+    public class LovedOneRepository : ILovedOneRepository
+    {
+        private readonly IMissMyFriendsDbContext _context;
+
+        public LovedOneRepository(IMissMyFriendsDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<LovedOne> AddAsync(LovedOne lovedOne)
+        {
+            _context.LovedOnes.Add(lovedOne);
+            await _context.SaveChangesAsync();
+            return lovedOne;
+        }
+
+        public async Task<LovedOne?> GetByIdAsync(int id)
+        {
+            return await _context.LovedOnes.Include(lovedOne => lovedOne.Hangouts).FirstOrDefaultAsync(lovedOne => lovedOne.Id == id);
+        }
+
+        public async Task<List<LovedOne>> GetAllAsync()
+        {
+            return await _context.LovedOnes.Include(lovedOne => lovedOne.Hangouts).ToListAsync();
+        }
+
+
+        public Task<LovedOne> UpdateAsync(LovedOne lovedOne)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+    public interface ILovedOneRepository
+    {
+        Task<LovedOne> AddAsync(LovedOne lovedOne);
+        Task<LovedOne?> GetByIdAsync(int id);
+        Task<List<LovedOne>> GetAllAsync();
+        Task DeleteAsync(int id);
+        Task<LovedOne> UpdateAsync(LovedOne lovedOne);
+    }
+}
