@@ -20,7 +20,7 @@ namespace immfApi.Endpoints.LovedOnes
             return new CreateLovedOneResponse(createdLovedOne.Id, createdLovedOne.Name, EnumTools.MapEnumToStringRelationship(createdLovedOne.Relationship), lastHangout);
         }
 
-        public async Task<GetSingleLovedOneResponse?> GetByIdAsync(GetByIdRequest requst)
+        public async Task<GetSingleLovedOneResponse?> GetByIdAsync(IdRequest requst)
         {
             var lovedOne = await _lovedOneRepository.GetByIdAsync(requst.Id);
             if (lovedOne == null) return null;
@@ -47,13 +47,21 @@ namespace immfApi.Endpoints.LovedOnes
             if (lovedOne == null) return null;
             return new UpdateLovedOneResponse($"Successfully updated lovedone with ID {lovedOne.Id}, with data {lovedOne.Name} & {lovedOne.Relationship}");
         }
+
+        public async Task<OperationResult> DeleteAsync(IdRequest request)
+        {
+            var lovedOne = await _lovedOneRepository.DeleteAsync(request.Id);
+            if (lovedOne == OperationResult.NotFound) return OperationResult.NotFound;
+            return OperationResult.Deleted;
+        }
     }
 
     public interface ILovedOneService
     {
         Task<CreateLovedOneResponse> CreateAsync(CreateLovedOneRequest request);
-        Task<GetSingleLovedOneResponse?> GetByIdAsync(GetByIdRequest request);
+        Task<GetSingleLovedOneResponse?> GetByIdAsync(IdRequest request);
         Task<GetAllLovedOnesResponse> GetAllAsync();
         Task<UpdateLovedOneResponse?> UpdateAsync(UpdateLovedOneRequest request);
+        Task<OperationResult> DeleteAsync(IdRequest request);
     }
 }

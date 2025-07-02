@@ -1,3 +1,4 @@
+using immfApi.Endpoints;
 using immfApi.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,9 +41,14 @@ namespace immfApi.DataAccessLayer
             return lovedOne;
         }
 
-        public Task DeleteAsync(int id)
+        public async Task<OperationResult> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var lovedOne = await _context.LovedOnes.FindAsync(id);
+            if (lovedOne == null) return OperationResult.NotFound;
+
+            _context.LovedOnes.Remove(lovedOne);
+            await _context.SaveChangesAsync();
+            return OperationResult.Deleted;
         }
     }
 
@@ -52,7 +58,7 @@ namespace immfApi.DataAccessLayer
         Task<LovedOne> AddAsync(LovedOne lovedOne);
         Task<LovedOne?> GetByIdAsync(int id);
         Task<List<LovedOne>> GetAllAsync();
-        Task DeleteAsync(int id);
+        Task<OperationResult> DeleteAsync(int id);
         Task<LovedOne?> UpdateAsync(int id, string name, Relationship relationship);
     }
 }

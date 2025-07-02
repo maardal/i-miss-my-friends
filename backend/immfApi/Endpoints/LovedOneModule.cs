@@ -22,7 +22,7 @@ namespace immfApi.Endpoints
                 return Results.Created($"/lovedone/{lovedOne.Id}", lovedOne);
             });
 
-            app.MapGet("/lovedone/{id}", async ([FromServices] ILovedOneService lovedOneService, [AsParameters] GetByIdRequest request) =>
+            app.MapGet("/lovedone/{id}", async ([FromServices] ILovedOneService lovedOneService, [AsParameters] IdRequest request) =>
             {
                 var lovedOne = await lovedOneService.GetByIdAsync(request);
                 if (lovedOne == null) return Results.NotFound($"Lovedone with id {request.Id} was not Found");
@@ -48,14 +48,12 @@ namespace immfApi.Endpoints
 
             });
 
-            // app.MapDelete("/lovedone/{id}", async (IMissMyFriendsDbContext db, int id) =>
-            // {
-            //     var loved = await db.LovedOnes.FindAsync(id);
-            //     if (loved is null) return Results.NotFound();
-            //     db.LovedOnes.Remove(loved);
-            //     await db.SaveChangesAsync();
-            //     return Results.Ok();
-            // });
+            app.MapDelete("/lovedone/{id}", async ([FromServices] ILovedOneService lovedOneService, [AsParameters] IdRequest request) =>
+            {
+                var result = await lovedOneService.DeleteAsync(request);
+                if (result == OperationResult.NotFound) return Results.NotFound();
+                return Results.Ok();
+            });
         }
     }
 }
