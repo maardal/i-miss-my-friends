@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Immf.Models
+namespace immfApi.Models
 {
-    public class IMissMyFriendsDb : DbContext
+    public class IMissMyFriendsDbContext : DbContext
     {
-        public IMissMyFriendsDb(DbContextOptions options) : base(options) { }
+        public IMissMyFriendsDbContext(DbContextOptions options) : base(options) { }
         public DbSet<LovedOne> LovedOnes { get; set; } = null!;
         public DbSet<Hangout> Hangouts { get; set; } = null!;
     }

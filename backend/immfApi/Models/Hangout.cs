@@ -1,4 +1,4 @@
-namespace Immf.Models
+namespace immfApi.Models
 {
   public class Hangout
   {
