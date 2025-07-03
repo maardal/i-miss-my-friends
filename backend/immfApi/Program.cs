@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using immfApi.Endpoints;
 using immfApi.DataAccessLayer;
 using immfApi.Endpoints.LovedOnes;
+using immfApi.Endpoints.Hangouts;
 
 const string Database = "Immf";
 
@@ -27,6 +28,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSqlite<IMissMyFriendsDbContext>(connectionString);
 builder.Services.AddScoped<ILovedOneRepository, LovedOneRepository>();
 builder.Services.AddScoped<ILovedOneService, LovedOneService>();
+builder.Services.AddScoped<IHangoutRepository, HangoutRepository>();
+builder.Services.AddScoped<IHangoutService, HangoutService>();
+
 builder.Services.Configure<JsonOptions>(options =>
 {
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -45,6 +49,7 @@ var app = builder.Build();
 
 app.UseCors();
 app.AddLovedOneEndpoints();
+app.AddHangoutEndpoints();
 
 if (app.Environment.IsDevelopment())
 {

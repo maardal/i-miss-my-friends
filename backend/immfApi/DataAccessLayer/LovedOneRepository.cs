@@ -15,7 +15,7 @@ namespace immfApi.DataAccessLayer
 
         public async Task<LovedOne> AddAsync(LovedOne lovedOne)
         {
-            _context.LovedOnes.Add(lovedOne);
+            await _context.LovedOnes.AddAsync(lovedOne);
             await _context.SaveChangesAsync();
             return lovedOne;
         }

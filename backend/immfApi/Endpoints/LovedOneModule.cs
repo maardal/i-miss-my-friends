@@ -1,6 +1,5 @@
 using immfApi.Models;
 using immfApi.Endpoints.LovedOnes;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 
 namespace immfApi.Endpoints
@@ -22,10 +21,10 @@ namespace immfApi.Endpoints
                 return Results.Created($"/lovedone/{lovedOne.Id}", lovedOne);
             });
 
-            app.MapGet("/lovedone/{id}", async ([FromServices] ILovedOneService lovedOneService, [AsParameters] IdRequest request) =>
+            app.MapGet("/lovedone/{id}", async ([FromServices] ILovedOneService lovedOneService, [AsParameters] LovedOneIdRequest request) =>
             {
                 var lovedOne = await lovedOneService.GetByIdAsync(request);
-                if (lovedOne == null) return Results.NotFound($"Lovedone with id {request.Id} was not Found");
+                if (lovedOne == null) return Results.NotFound($"Lovedone with id {request.LovedOneId} was not Found");
                 return Results.Ok(lovedOne);
             });
 
@@ -48,7 +47,7 @@ namespace immfApi.Endpoints
 
             });
 
-            app.MapDelete("/lovedone/{id}", async ([FromServices] ILovedOneService lovedOneService, [AsParameters] IdRequest request) =>
+            app.MapDelete("/lovedone/{id}", async ([FromServices] ILovedOneService lovedOneService, [AsParameters] LovedOneIdRequest request) =>
             {
                 var result = await lovedOneService.DeleteAsync(request);
                 if (result == OperationResult.NotFound) return Results.NotFound();
