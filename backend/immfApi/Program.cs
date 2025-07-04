@@ -48,6 +48,8 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 app.UseCors();
+
+//Register Endpoints
 app.AddLovedOneEndpoints();
 app.AddHangoutEndpoints();
 

@@ -9,6 +9,7 @@ namespace immfApi.Endpoints
         {
             app.MapPost("/hangout", async ([FromServices] IHangoutService hangoutService, [FromBody] CreateHangoutRequest request) =>
             {
+                if (request.Date > DateTime.Now) return Results.BadRequest("Date cannot be in the future");
                 var hangout = await hangoutService.CreateHangoutAsync(request);
                 if (hangout == null) return Results.BadRequest($"LovedOne ID is not found");
                 return Results.Created($"/hangout/{hangout.Id}", hangout);
