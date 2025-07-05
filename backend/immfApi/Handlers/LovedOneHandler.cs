@@ -1,3 +1,4 @@
+using immfApi.Models;
 using immfApi.Endpoints;
 using immfApi.Endpoints.LovedOnes;
 using System.Text.Json;
@@ -18,12 +19,8 @@ namespace immfApi.Handlers
                 return Results.BadRequest(new { error = "Invalid JSON", details = ex.Message });
             }
 
-            if (request is null || string.IsNullOrWhiteSpace(request.Name) || request.Name.Length > 99)
-                return Results.BadRequest("Name must be between 1 and 99 (inclusive) characters long");
-
-            if (string.IsNullOrWhiteSpace(request.Relationship) || !EnumTools.IsValidRelationship(request.Relationship))
-                return Results.BadRequest($"Relationship must be one of: {EnumTools.EnumListPrettified()}");
-
+            var validation = ValidateCreateLovedOneRequest(request);
+            if (!validation.IsSuccess) return Results.BadRequest(new { error = validation.Error });
 
             var lovedOne = await lovedOneService.CreateAsync(request);
 
@@ -32,11 +29,13 @@ namespace immfApi.Handlers
 
         public static async Task<IResult> GetByIdAsync(ILovedOneService lovedOneService, string id)
         {
-            if (!int.TryParse(id, out var lovedOneId)) return Results.BadRequest(new { error = "Invalid id, must be a whole number." });
-            var lovedOne = await lovedOneService.GetByIdAsync(lovedOneId);
+            var validation = ValidateId(id);
+            if (!validation.IsSuccess) return Results.BadRequest(new { error = validation.Error});
+
+            var lovedOne = await lovedOneService.GetByIdAsync(validation.Value);
 
             return lovedOne is null
-                ? Results.NotFound($"Lovedone with id {lovedOneId} was not Found")
+                ? Results.NotFound($"Lovedone with id {id} was not Found")
                 : Results.Ok(lovedOne);
         }
 
@@ -58,11 +57,9 @@ namespace immfApi.Handlers
                 return Results.BadRequest(new { error = "Invalid JSON", details = ex.Message });
             }
 
-            if (request is null || string.IsNullOrWhiteSpace(request.Name) || request.Name.Length > 99)
-                return Results.BadRequest("Name must be between 1 and 99 (inclusive) characters long");
-
-            if (string.IsNullOrWhiteSpace(request.Relationship) || !EnumTools.IsValidRelationship(request.Relationship))
-                return Results.BadRequest($"Relationship must be one of: {EnumTools.EnumListPrettified()}");
+            var validation = ValidateUpdateLovedOneRequest(request);
+            if (!validation.IsSuccess)
+                return Results.BadRequest(new { error = validation.Error });
 
             var lovedOne = await lovedOneService.UpdateAsync(request);
 
@@ -73,10 +70,42 @@ namespace immfApi.Handlers
 
         public static async Task<IResult> DeleteLovedOneAsync(ILovedOneService lovedOneService, string id)
         {
-            if (!int.TryParse(id, out var lovedOneId)) return Results.BadRequest(new { error = "Invalid id, must be a whole number." });
-            var result = await lovedOneService.DeleteAsync(lovedOneId);
+            var validation = ValidateId(id);
+            if (!validation.IsSuccess) return Results.BadRequest(new { error = validation.Error });
+
+            var result = await lovedOneService.DeleteAsync(validation.Value);
             if (result == OperationResult.NotFound) return Results.NotFound();
+
             return Results.Ok();
+        }
+
+        private static ValidationResult<CreateLovedOneRequest> ValidateCreateLovedOneRequest(CreateLovedOneRequest request)
+        {
+            if (request is null || string.IsNullOrWhiteSpace(request.Name) || request.Name.Length > 99)
+                return ValidationResult<CreateLovedOneRequest>.Fail("Name must be between 1 and 99 (inclusive) characters long");
+
+            if (string.IsNullOrWhiteSpace(request.Relationship) || !EnumTools.IsValidRelationship(request.Relationship))
+                return ValidationResult<CreateLovedOneRequest>.Fail($"Relationship must be one of: {EnumTools.EnumListPrettified()}");
+
+            return ValidationResult<CreateLovedOneRequest>.Success(request);
+        }
+
+        private static ValidationResult<UpdateLovedOneRequest> ValidateUpdateLovedOneRequest(UpdateLovedOneRequest request)
+        {
+            if (request is null || string.IsNullOrWhiteSpace(request.Name) || request.Name.Length > 99)
+                return ValidationResult<UpdateLovedOneRequest>.Fail("Name must be between 1 and 99 (inclusive) characters long");
+
+            if (string.IsNullOrWhiteSpace(request.Relationship) || !EnumTools.IsValidRelationship(request.Relationship))
+                return ValidationResult<UpdateLovedOneRequest>.Fail($"Relationship must be one of: {EnumTools.EnumListPrettified()}");
+
+            return ValidationResult<UpdateLovedOneRequest>.Success(request);
+        }
+
+        private static ValidationResult<int> ValidateId(string id)
+        {
+            return !int.TryParse(id, out var lovedOneId)
+                    ? ValidationResult<int>.Fail("Invalid id, must be whole number")
+                    : ValidationResult<int>.Success(lovedOneId);
         }
     }
 }
