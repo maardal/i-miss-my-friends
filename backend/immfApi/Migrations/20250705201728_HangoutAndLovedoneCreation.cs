@@ -6,11 +6,25 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace immfApi.Migrations
 {
     /// <inheritdoc />
-    public partial class AddHangout : Migration
+    public partial class HangoutAndLovedoneCreation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "LovedOnes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Relationship = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LovedOnes", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Hangouts",
                 columns: table => new
@@ -42,6 +56,9 @@ namespace immfApi.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Hangouts");
+
+            migrationBuilder.DropTable(
+                name: "LovedOnes");
         }
     }
 }
