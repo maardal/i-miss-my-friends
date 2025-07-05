@@ -4,17 +4,18 @@ public static class EnumTools
 {
     public static Relationship MapStringToEnumRelationship(string enumAsString)
     {
-        Relationship returnEnum = Relationship.Friend;
-        switch (enumAsString.ToLower())
+        Relationship returnEnum = enumAsString.ToLower() switch
         {
-            case "friend":
-                returnEnum = Relationship.Friend;
-                break;
-            case "family":
-                returnEnum = Relationship.Family;
-                break;
-        }
+            "friend" => Relationship.Friend,
+            "family" => Relationship.Family,
+            _ => Relationship.Friend
+        };
         return returnEnum;
+    }
+
+    public static bool IsValidRelationship(string relationship)
+    {
+        return Enum.GetNames(typeof(Relationship)).ToList().Exists(relation => string.Equals(relation.ToLower(), relationship.ToLower()));
     }
 
     public static string MapEnumToStringRelationship(Relationship relationship)

@@ -19,9 +19,9 @@ namespace immfApi.Endpoints.Hangouts
             return new HangoutResponse(hangout.Id, hangout.Date, hangout.LovedOne.Id);
         }
 
-        public async Task<HangoutResponse?> GetByIdAsync(HangoutIdRequest request)
+        public async Task<HangoutResponse?> GetByIdAsync(int hangoutId)
         {
-            var hangout = await _hangoutRepository.FindHangoutAsync(request.HangoutId);
+            var hangout = await _hangoutRepository.FindHangoutAsync(hangoutId);
             if (hangout == null) return null;
             return new HangoutResponse(hangout.Id, hangout.Date, hangout.LovedOne.Id);
         }
@@ -33,16 +33,16 @@ namespace immfApi.Endpoints.Hangouts
             return new HangoutsResponse(responses);
         }
 
-        public async Task<HangoutsResponse> GetAllHangoutsByLovedOneIdAsync(LovedOneIdRequest request)
+        public async Task<HangoutsResponse> GetAllHangoutsByLovedOneIdAsync(int lovedOneId)
         {
-            var hangouts = await _hangoutRepository.GetAllHangoutsByLovedOneIdAsync(request.LovedOneId);
+            var hangouts = await _hangoutRepository.GetAllHangoutsByLovedOneIdAsync(lovedOneId);
             var responses = hangouts.Select(hangout => new HangoutResponse(hangout.Id, hangout.Date, hangout.LovedOne.Id)).ToList();
             return new HangoutsResponse(responses);
         }
 
-        public async Task<OperationResult> DeleteHangoutAsync(HangoutIdRequest request)
+        public async Task<OperationResult> DeleteHangoutAsync(int hangoutId)
         {
-            var result = await _hangoutRepository.DeleteHangoutAsync(request.HangoutId);
+            var result = await _hangoutRepository.DeleteHangoutAsync(hangoutId);
             if (result == OperationResult.NotFound) return OperationResult.NotFound;
             return OperationResult.Deleted;
         }
@@ -51,9 +51,9 @@ namespace immfApi.Endpoints.Hangouts
     public interface IHangoutService
     {
         Task<HangoutResponse?> CreateHangoutAsync(CreateHangoutRequest request);
-        Task<HangoutResponse?> GetByIdAsync(HangoutIdRequest requst);
+        Task<HangoutResponse?> GetByIdAsync(int hangoutId);
         Task<HangoutsResponse> GetAllHangoutsAsync();
-        Task<HangoutsResponse> GetAllHangoutsByLovedOneIdAsync(LovedOneIdRequest request);
-        Task<OperationResult> DeleteHangoutAsync(HangoutIdRequest request);
+        Task<HangoutsResponse> GetAllHangoutsByLovedOneIdAsync(int lovedOneId);
+        Task<OperationResult> DeleteHangoutAsync(int hangoutId);
     }
 }
