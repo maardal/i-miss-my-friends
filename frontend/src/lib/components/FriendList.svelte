@@ -4,6 +4,6 @@
 	console.log(lovedones);
 </script>
 
-{#each lovedones as loved}
-	<p>{loved.relationship}: {loved.loved_name} + {loved.last_hangout}</p>
+{#each data.lovedones as lovedOne}
+	<p>{lovedOne.relationship}: {lovedOne.name} + {lovedOne.lastHangout}</p>
 {/each}

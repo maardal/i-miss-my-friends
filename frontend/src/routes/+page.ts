@@ -1,8 +1,13 @@
 import type { PageLoad } from './$types';
-import { FRIENDS_URL } from '$lib/config';
+import { BASE_BACKEND_URL } from '$lib/config';
 
 export const load: PageLoad = async ({ fetch }) => {
-	const response = await fetch(FRIENDS_URL);
-	const body = await response.json();
-	return { lovedones: body };
+	let lovedones = [];
+	try {
+		const response = await fetch(BASE_BACKEND_URL + "lovedones/");
+		lovedones = await response.json();
+	} catch (error) {
+		console.log("Error loading data from backend =>", error);
+	}
+	return { lovedones: [...lovedones] };
 };

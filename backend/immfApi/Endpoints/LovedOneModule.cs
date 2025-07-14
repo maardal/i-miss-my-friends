@@ -18,7 +18,7 @@ namespace immfApi.Endpoints
             .Produces(StatusCodes.Status404NotFound);
 
             app.MapGet("/lovedones", LovedOneHandlers.GetAllLovedOnesAsync)
-            .Produces<GetAllLovedOnesResponse>(StatusCodes.Status200OK);
+            .Produces<List<GetSingleLovedOneResponse>>(StatusCodes.Status200OK);
 
             app.MapPut("/lovedone", LovedOneHandlers.UpdateLovedOneAsync)
             .Accepts<UpdateLovedOneRequest>("application/json")
@@ -30,7 +30,6 @@ namespace immfApi.Endpoints
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status404NotFound);
-            
         }
     }
 }

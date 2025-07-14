@@ -4,13 +4,18 @@
 	import Header from '$lib/components/Header.svelte';
 	import type { PageProps } from './$types';
 
-	let { data: lovedones }: PageProps = $props();
+	let { data }: PageProps = $props();
+	let { lovedones } = data;
 </script>
 
 <main class="layout">
 	<Header></Header>
-	<main class="friend-list">
-		<FriendList {lovedones}></FriendList>
-	</main>
+	{#if lovedones.length != 0}
+		<main class="friend-list">
+			<FriendList {lovedones}></FriendList>
+		</main>
+	{:else}
+		<p>No loved ones loaded</p>
+	{/if}
 	<Footer></Footer>
 </main>

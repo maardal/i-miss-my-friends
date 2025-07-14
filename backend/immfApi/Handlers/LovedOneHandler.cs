@@ -30,7 +30,7 @@ namespace immfApi.Handlers
         public static async Task<IResult> GetByIdAsync(ILovedOneService lovedOneService, string id)
         {
             var validation = ValidateId(id);
-            if (!validation.IsSuccess) return Results.BadRequest(new { error = validation.Error});
+            if (!validation.IsSuccess) return Results.BadRequest(new { error = validation.Error });
 
             var lovedOne = await lovedOneService.GetByIdAsync(validation.Value);
 

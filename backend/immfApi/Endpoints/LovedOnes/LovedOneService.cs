@@ -24,11 +24,11 @@ namespace immfApi.Endpoints.LovedOnes
         {
             var lovedOne = await _lovedOneRepository.GetByIdAsync(lovedOneId);
             if (lovedOne == null) return null;
-            var lastHangout = lovedOne.Hangouts?.OrderByDescending(hangout => hangout.Date).Select(hangout => hangout.Date).FirstOrDefault();
+            var lastHangout = lovedOne.Hangouts?.OrderByDescending(hangout => hangout.Date).Select(hangout => hangout.Date.Date).FirstOrDefault().ToString("d");
             return new GetSingleLovedOneResponse(lovedOne.Id, lovedOne.Name, EnumTools.MapEnumToStringRelationship(lovedOne.Relationship), lastHangout);
         }
 
-        public async Task<GetAllLovedOnesResponse> GetAllAsync()
+        public async Task<List<GetSingleLovedOneResponse>> GetAllAsync()
         {
             var lovedOnes = await _lovedOneRepository.GetAllAsync();
             var lovedOnesList = lovedOnes.Select(lovedOne => new GetSingleLovedOneResponse
@@ -36,9 +36,9 @@ namespace immfApi.Endpoints.LovedOnes
                 lovedOne.Id,
                 lovedOne.Name,
                 EnumTools.MapEnumToStringRelationship(lovedOne.Relationship),
-                lovedOne.Hangouts?.OrderByDescending(hangout => hangout.Date).Select(hangout => hangout.Date).FirstOrDefault()
+                lovedOne.Hangouts?.OrderByDescending(hangout => hangout.Date).Select(hangout => hangout.Date.Date).FirstOrDefault().ToString("d")
             )).ToList();
-            return new GetAllLovedOnesResponse(lovedOnesList);
+            return lovedOnesList;
         }
 
         public async Task<UpdateLovedOneResponse?> UpdateAsync(UpdateLovedOneRequest request)
@@ -60,7 +60,7 @@ namespace immfApi.Endpoints.LovedOnes
     {
         Task<CreateLovedOneResponse> CreateAsync(CreateLovedOneRequest request);
         Task<GetSingleLovedOneResponse?> GetByIdAsync(int lovedOneId);
-        Task<GetAllLovedOnesResponse> GetAllAsync();
+        Task<List<GetSingleLovedOneResponse>> GetAllAsync();
         Task<UpdateLovedOneResponse?> UpdateAsync(UpdateLovedOneRequest request);
         Task<OperationResult> DeleteAsync(int lovedOneId);
     }
