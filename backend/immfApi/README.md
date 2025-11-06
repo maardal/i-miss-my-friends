@@ -7,7 +7,7 @@ Backend for the small web app that lets you easily see how long since you've han
 C# server using Minimal API, Entity Framework and SQLite.
 Versions
 
-- NET 9.0
+- NET 9.0 with AspNetCore.
 - EF SQLite 9.0
 - EF Core Design 9.0
 
@@ -22,6 +22,8 @@ Run the following three commands to install them
     dotnet tool install --global dotnet-ef
     dotnet add package Microsoft.EntityFrameworkCore.Design --version 9.0
 ```
+
+NB: If you're running linux with a pre-installed Dotnet SDK, you might be missing the **AspNetCore** framework. Install **version 9** throguh your package manager.
 
 ## How to run
 
