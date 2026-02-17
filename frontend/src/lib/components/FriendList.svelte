@@ -1,9 +1,15 @@
 <script lang="ts">
-	let data = $props();
-	const { lovedones } = data.lovedones;
-	console.log(lovedones);
+	import type { LovedOne } from '$lib/types/types';
+	import LovedOneCard from './LovedOneCard.svelte';
+
+	const data = $props<{ lovedOnes: LovedOne[] }>();
+	const lovedOnes = data.lovedOnes;
 </script>
 
-{#each lovedones as loved}
-	<p>{loved.relationship}: {loved.loved_name} + {loved.last_hangout}</p>
-{/each}
+{#if lovedOnes && lovedOnes.length > 0}
+	{#each lovedOnes as loved}
+		<LovedOneCard {loved}></LovedOneCard>
+	{/each}
+{:else}
+	<p>No loved ones found</p>
+{/if}
