@@ -35,6 +35,7 @@ builder.Services.Configure<JsonOptions>(options =>
 {
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -45,9 +46,12 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddHttpLogging( options => { });
+
 var app = builder.Build();
 
 app.UseCors();
+app.UseHttpLogging();
 
 //Register Endpoints
 app.AddLovedOneEndpoints();
