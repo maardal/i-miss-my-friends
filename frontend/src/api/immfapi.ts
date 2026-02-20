@@ -1,5 +1,5 @@
 import { FRIENDS_URL } from '$lib/config';
-import type { Hangout } from '$lib/stores/HangoutStore.svelte';
+import { type Hangout } from '$lib/stores/HangoutStore.svelte';
 
 const SUCCESS = 201;
 const BAD_REQUEST = 400;
@@ -7,7 +7,7 @@ const BAD_REQUEST = 400;
 export const createHangout = async (id: string) => {
 	console.log(`adding hangout for lovedone: ${id}`);
 	const date = formateDateToYYYYMMDD(new Date());
-	console.log(date);
+
 	try {
 		const response = await fetch(FRIENDS_URL + 'hangout', {
 			method: 'POST',
@@ -22,11 +22,8 @@ export const createHangout = async (id: string) => {
 			console.warn(`ID: ${id}`);
 		}
 		if (response.status == SUCCESS) {
-			// Unpack Hangout object
-			// Save to store.
 			const responseData: Hangout = await response.json();
-
-			console.log(responseData);
+			return responseData;
 		}
 	} catch (error) {
 		console.error(error);
