@@ -1,4 +1,5 @@
 import { FRIENDS_URL } from '$lib/config';
+import type { Hangout } from '$lib/stores/HangoutStore.svelte';
 
 const SUCCESS = 201;
 const BAD_REQUEST = 400;
@@ -21,7 +22,11 @@ export const createHangout = async (id: string) => {
 			console.warn(`ID: ${id}`);
 		}
 		if (response.status == SUCCESS) {
-			console.log(response);
+			// Unpack Hangout object
+			// Save to store.
+			const responseData: Hangout = await response.json();
+
+			console.log(responseData);
 		}
 	} catch (error) {
 		console.error(error);
