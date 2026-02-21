@@ -1,10 +1,5 @@
+import type { Hangout } from '$lib/types/types';
 import { getContext, setContext } from 'svelte';
-
-export type Hangout = {
-	id: string;
-	date: string;
-	lovedOneId: string;
-};
 
 interface HangoutState {
 	hangouts: Hangout[];
