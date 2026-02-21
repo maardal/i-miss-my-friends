@@ -12,7 +12,7 @@
 <main class="layout">
 	<Header></Header>
 	<main class="friend-list">
-		<FriendList lovedOnes={lovedOnes}></FriendList>
+		<FriendList {lovedOnes}></FriendList>
 	</main>
 	<Footer></Footer>
 </main>

@@ -1,5 +1,5 @@
 import { FRIENDS_URL } from '$lib/config';
-import { type Hangout } from '$lib/stores/HangoutStore.svelte';
+import { type Hangout } from '$lib/types/types';
 
 const SUCCESS = 201;
 const BAD_REQUEST = 400;
