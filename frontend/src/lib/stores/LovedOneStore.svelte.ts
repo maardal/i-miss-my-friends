@@ -3,14 +3,24 @@ import { getContext, setContext } from 'svelte';
 
 interface LovedOneState {
 	lovedOnes: LovedOne[];
-	refetchLovedOne: (lovedOne: LovedOne) => void;
+	addLovedOnes: (lovedOnes: LovedOne[]) => LovedOne[];
+	updateLovedOne: (lovedOne: LovedOne) => void;
 }
 
 export class LovedOneStateClass implements LovedOneState {
 	lovedOnes = $state<LovedOne[]>([]);
 
-	refetchLovedOne = (lovedOne: LovedOne) => {
-		console.log(`kek, gonna try refetching the lovedone for this one ${lovedOne}`);
+	addLovedOnes = (lovedOnes: LovedOne[]) => {
+		this.lovedOnes.push(...lovedOnes);
+		return this.lovedOnes;
+	};
+
+	updateLovedOne = (lovedOne: LovedOne) => {
+		const index = this.lovedOnes.findIndex((loved) => loved.id === lovedOne.id);
+		if (index != -1) {
+			this.lovedOnes[index] = lovedOne;
+			this.lovedOnes = this.lovedOnes;
+		}
 	};
 }
 
