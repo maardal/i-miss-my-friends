@@ -4,9 +4,12 @@
 	import Header from '$lib/components/Header.svelte';
 	import type { PageProps } from './$types';
 	import type { LovedOne } from '$lib/types/types';
+	import { getLovedOneState } from '$lib/stores/LovedOneStore.svelte';
+
+	const lovedOneStore = getLovedOneState();
 
 	let { data }: PageProps = $props();
-	const lovedOnes: LovedOne[] = data.lovedOnes;
+	const lovedOnes: LovedOne[] = lovedOneStore.addLovedOnes(data.lovedOnes);
 </script>
 
 <main class="layout">
