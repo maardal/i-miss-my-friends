@@ -5,6 +5,7 @@
 	import type { PageProps } from './$types';
 	import type { LovedOne } from '$lib/types/types';
 	import { getLovedOneState } from '$lib/stores/LovedOneStore.svelte';
+	import AddLovedOne from '$lib/components/AddLovedOne.svelte';
 
 	const lovedOneStore = getLovedOneState();
 
@@ -15,6 +16,7 @@
 <main class="layout">
 	<Header></Header>
 	<main class="friend-list">
+		<AddLovedOne></AddLovedOne>
 		<FriendList {lovedOnes}></FriendList>
 	</main>
 	<Footer></Footer>

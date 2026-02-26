@@ -2,35 +2,41 @@ import type { LovedOne } from '$lib/types/types';
 import { getContext, setContext } from 'svelte';
 
 interface LovedOneState {
-	lovedOnes: LovedOne[];
-	addLovedOnes: (lovedOnes: LovedOne[]) => LovedOne[];
-	updateLovedOne: (lovedOne: LovedOne) => void;
+  lovedOnes: LovedOne[];
+  addLovedOne: (lovedOne: LovedOne) => void;
+  addLovedOnes: (lovedOnes: LovedOne[]) => LovedOne[];
+  updateLovedOne: (lovedOne: LovedOne) => void;
 }
 
 export class LovedOneStateClass implements LovedOneState {
-	lovedOnes = $state<LovedOne[]>([]);
+  lovedOnes = $state<LovedOne[]>([]);
 
-	addLovedOnes = (lovedOnes: LovedOne[]) => {
-		this.lovedOnes.push(...lovedOnes);
-		return this.lovedOnes;
-	};
+  addLovedOne = (lovedOne: LovedOne) => {
+    const index = this.lovedOnes.findIndex((loved) => loved.id === lovedOne.id);
+    index == -1 ? this.lovedOnes.push(lovedOne) : console.log(`LovedOne with id ${lovedOne.id} already exists.`);
+  }
 
-	updateLovedOne = (lovedOne: LovedOne) => {
-		const index = this.lovedOnes.findIndex((loved) => loved.id === lovedOne.id);
-		if (index != -1) {
-			this.lovedOnes[index] = lovedOne;
-			this.lovedOnes = this.lovedOnes;
-		}
-	};
+  addLovedOnes = (lovedOnes: LovedOne[]) => {
+    this.lovedOnes.push(...lovedOnes);
+    return this.lovedOnes;
+  };
+
+  updateLovedOne = (lovedOne: LovedOne) => {
+    const index = this.lovedOnes.findIndex((loved) => loved.id === lovedOne.id);
+    if (index != -1) {
+      this.lovedOnes[index] = lovedOne;
+      this.lovedOnes = this.lovedOnes;
+    }
+  };
 }
 
 const DEFAULT_KEY = '$_lovedOne_store';
 
 export const getLovedOneState = (key = DEFAULT_KEY) => {
-	return getContext<LovedOneState>(key);
+  return getContext<LovedOneState>(key);
 };
 
 export const setLovedOneState = (key = DEFAULT_KEY) => {
-	const lovedOneState = new LovedOneStateClass();
-	return setContext(key, lovedOneState);
+  const lovedOneState = new LovedOneStateClass();
+  return setContext(key, lovedOneState);
 };
