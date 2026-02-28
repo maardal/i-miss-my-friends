@@ -1,4 +1,4 @@
-type Relationship = 'family' | 'friend';
+export type Relationship = 'family' | 'friend';
 
 export type LovedOne = {
   id: string;

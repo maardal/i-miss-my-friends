@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { getLovedOneState } from '$lib/stores/LovedOneStore.svelte';
-	import type { CreateLovedoneRequest, LovedOne } from '$lib/types/types';
+	import type { CreateLovedoneRequest, LovedOne, Relationship } from '$lib/types/types';
 	import { createLovedOne } from '../../api/immfapi';
 
 	const lovedOneStore = getLovedOneState();
+
+	const name = $state('');
+	const relationship = $state<Relationship>('friend');
 
 	async function postLovedOne() {
 		const randNum = Math.round(Math.random() * 10000);

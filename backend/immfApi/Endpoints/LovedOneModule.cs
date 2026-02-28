@@ -10,7 +10,7 @@ namespace immfApi.Endpoints
             app.MapPost("/lovedone", LovedOneHandlers.CreateLovedOneRequestAsync)
             .Accepts<CreateLovedOneRequest>("application/json")
             .Produces<CreateLovedOneResponse>(StatusCodes.Status201Created)
-            .Produces(StatusCodes.Status404NotFound);
+            .Produces(StatusCodes.Status400BadRequest);
 
             app.MapGet("/lovedone/{id}", LovedOneHandlers.GetByIdAsync)
             .Produces<GetSingleLovedOneResponse>(StatusCodes.Status200OK)

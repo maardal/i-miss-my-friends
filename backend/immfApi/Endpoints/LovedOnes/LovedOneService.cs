@@ -16,7 +16,7 @@ namespace immfApi.Endpoints.LovedOnes
         {
             var lovedOne = new LovedOne { Name = request.Name, Relationship = EnumTools.MapStringToEnumRelationship(request.Relationship) };
             var createdLovedOne = await _lovedOneRepository.AddAsync(lovedOne);
-            var lastHangout = createdLovedOne.Hangouts?.OrderByDescending(hangout => hangout.Date).Select(hangout => hangout.Date).FirstOrDefault();
+            var lastHangout = new DateTime(0001,1,1); // Add a default date when creating LovedOne. 
             return new CreateLovedOneResponse(createdLovedOne.Id, createdLovedOne.Name, EnumTools.MapEnumToStringRelationship(createdLovedOne.Relationship), lastHangout);
         }
 
